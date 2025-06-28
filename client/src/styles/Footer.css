@@ -1,0 +1,18 @@
+.footer {
+  background-color: #212529; /* Mismo color que bg-dark de Bootstrap */
+  color: #f8f9fa;            /* Mismo color que text-light de Bootstrap */
+  padding: 10px 0;
+  text-align: center;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.footer .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer p {
+  margin: 5px 0;
+  color: #f8f9fa;
+}
