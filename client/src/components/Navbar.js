@@ -57,33 +57,70 @@ function AppNavbar() {
         <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav">
           <Nav className="ms-auto align-items-center">
-            <Nav.Link as={Link} to="/viajes">Viajes</Nav.Link>
+            <Nav.Link
+              onClick={() => {
+                const token = localStorage.getItem('token');
+                const user = parseJwt(token);
+                if (user?.rol === 'conductor') {
+                  navigate('/conductor');
+                } else if (user?.rol === 'pasajero') {
+                  navigate('/pasajero');
+                } else {
+                  navigate('/login');
+                }
+              }}
+            >
+              Viajes
+            </Nav.Link>
 
             {isLoggedIn ? (
-              <>
-                <Nav.Link as={Link} to="/perfil" title="Perfil">
-                  <FaUserCircle
+                <>
+                    <Nav.Link
+                    title="Perfil"
+                    onClick={() => {
+                        if (isLoggedIn) {
+                        navigate('/perfil');
+                        } else {
+                        navigate('/login');
+                        }
+                    }}
+                    >
+                    <FaUserCircle
+                        size={26}
+                        style={{ color: 'white', marginLeft: '20px' }}
+                    />
+                    </Nav.Link>
+
+                    <Nav.Link onClick={handleLogout} style={{ color: 'white' }}>
+                    Cerrar sesión
+                    </Nav.Link>
+                </>
+                ) : (
+                <Nav.Link
+                    onClick={() => navigate('/login')}
+                    title="Iniciar sesión"
+                >
+                    <FaUserCircle
                     size={26}
                     style={{ color: 'white', marginLeft: '20px' }}
-                  />
+                    />
                 </Nav.Link>
-                <Nav.Link onClick={handleLogout} style={{ color: 'white' }}>
-                  Cerrar sesión
-                </Nav.Link>
-              </>
-            ) : (
-              <Nav.Link as={Link} to="/" title="Iniciar sesión">
-                <FaUserCircle
-                  size={26}
-                  style={{ color: 'white', marginLeft: '20px' }}
-                />
-              </Nav.Link>
-            )}
+                )}
+
           </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
+}
+
+//  Agrega esta función para decodificar el token
+function parseJwt(token) {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (e) {
+    return null;
+  }
 }
 
 export default AppNavbar;
